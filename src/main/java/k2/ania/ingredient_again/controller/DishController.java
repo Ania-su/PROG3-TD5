@@ -19,6 +19,22 @@ import java.util.List;
 public class DishController {
     private final DishService dishService;
 
+    @GetMapping("/dishes")
+    public ResponseEntity<?> findAll() throws SQLException {
+        try{
+            return ResponseEntity
+                    .status(200)
+                    .header("Content-Type", "application/json")
+                    .body(dishService.findAll());
+        }
+        catch (Exception e) {
+            return ResponseEntity
+                    .status(500)
+                    .header("Content-Type", "text/plain")
+                    .body(e.getMessage());
+        }
+    }
+
     @GetMapping("/dishes/{id}")
     public ResponseEntity<?> findById(@PathVariable("id") int id) throws SQLException {
         try {
@@ -32,22 +48,6 @@ public class DishController {
                     .status(404)
                     .header("Content-Type", "text/plain")
                     .body(e.getMessage());
-        }
-        catch (Exception e) {
-            return ResponseEntity
-                    .status(500)
-                    .header("Content-Type", "text/plain")
-                    .body(e.getMessage());
-        }
-    }
-
-    @GetMapping("/dishes")
-    public ResponseEntity<?> findAll() throws SQLException {
-        try{
-            return ResponseEntity
-                    .status(200)
-                    .header("Content-Type", "application/json")
-                    .body(dishService.findAll());
         }
         catch (Exception e) {
             return ResponseEntity
