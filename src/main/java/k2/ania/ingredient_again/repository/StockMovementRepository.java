@@ -9,6 +9,7 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Timestamp;
 import java.time.Instant;
 
 @AllArgsConstructor
@@ -34,6 +35,10 @@ public class StockMovementRepository {
                 """;
         try (Connection connection = dataSource.getConnection()){
             PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, id);
+            ps.setTimestamp(2, Timestamp.from(date));
+            ps.setString(3, unit.name());
+
             ResultSet rs = ps.executeQuery();
 
             if(rs.next()) {

@@ -49,7 +49,7 @@ public class IngredientController {
             Ingredient ingredient = ingredientService.findIngredientById(id);
             return ResponseEntity
                     .status(200)
-                    .header("Content-Type", "text/plain")
+                    .header("Content-Type", "application/json")
                     .body(ingredient);
         } catch (NotFoundException e) {
             return ResponseEntity

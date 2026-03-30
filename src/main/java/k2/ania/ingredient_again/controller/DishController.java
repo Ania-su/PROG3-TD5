@@ -5,10 +5,7 @@ import k2.ania.ingredient_again.exceptions.NotFoundException;
 import k2.ania.ingredient_again.service.DishService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -57,7 +54,7 @@ public class DishController {
         }
     }
 
-    @GetMapping("/dishes/{id}/ingredients")
+    @PutMapping("/dishes/{id}/ingredients")
     public ResponseEntity<?> attachOrDetachIngredient(@PathVariable("id") int id, @RequestBody List<Ingredient> ingredients) throws SQLException {
         try {
             return ResponseEntity

@@ -87,10 +87,9 @@ public class DishRepository {
 
     private List<DishIngredient> findIngredientByDishId(Integer idDish) throws SQLException {
 
-        Connection connection = dataSource.getConnection();
         List<DishIngredient> dishIngredients = new ArrayList<>();
 
-        try {
+        try (Connection connection = dataSource.getConnection()) {
 
             PreparedStatement preparedStatement = connection.prepareStatement(
                     """
@@ -136,8 +135,8 @@ public class DishRepository {
     public void detachIngredient (Integer dishId, Integer ingredientId) throws SQLException {
         String sql = """
             delete from dishingredient
-            where dish.id = ?
-            and ingredient.id = ?;
+            where id_dish = ?
+            and id_ingredient= ?;
         """;
 
         try (Connection connection = dataSource.getConnection()) {
@@ -156,7 +155,7 @@ public class DishRepository {
             insert into dishingredient(
                 id_dish, id_ingredient, quantity_required, unit_type
             )
-            values (?, ?, ?, ?::unit_type);
+            values (?, ?, ?, ?::unit);
         """;
 
         try (Connection connection = dataSource.getConnection()) {
@@ -164,7 +163,7 @@ public class DishRepository {
             ps.setInt(1, dishId);
             ps.setInt(2, ingredientId);
             ps.setDouble(3, 0.0);
-            ps.setString(4, "unit_type");
+            ps.setString(4, "PCS");
 
             ps.executeUpdate();
         }

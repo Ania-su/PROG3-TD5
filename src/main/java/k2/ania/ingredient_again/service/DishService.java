@@ -32,7 +32,7 @@ public class DishService {
     }
 
     public Dish attachAndDetachIngredient(int dishId, List<Ingredient> ingredients) throws SQLException {
-        if  (ingredients.isEmpty()) {
+        if  (ingredients.isEmpty() || ingredients == null) {
             throw new BadRequestException("Missing request body");
         }
 
@@ -44,7 +44,7 @@ public class DishService {
         for (Ingredient ingredient : ingredients) {
             Ingredient ing = ingredientRepository.findIngredientById(ingredient.getId());
             if (ing != null) {
-                if (dish.getIngredients().contains(ing)) {
+                    if (dish.getIngredients().stream().anyMatch(di -> di.getIngredient().getId() == ing.getId())) {
                     dishRepository.detachIngredient(dishId, ing.getId());
                 }
                 else {

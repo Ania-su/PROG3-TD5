@@ -48,8 +48,8 @@ public class IngredientRepository {
         String sql = "select id, name, price, category from ingredient where id = ?";
         try (Connection connection = dataSource.getConnection()){
             PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
-
             while (rs.next()){
                 ingredient.setId(rs.getInt("id"));
                 ingredient.setName(rs.getString("name"));
