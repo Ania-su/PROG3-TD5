@@ -24,10 +24,10 @@ public class DishRepository {
         List<Dish> dishes = new ArrayList<>();
         String sql = """
                 select
-                    dish.id,
-                    dish.name,
+                    id,
+                    name,
                     dish_type,
-                    dish.price
+                    selling_price
                 from dish
         """;
 
@@ -37,9 +37,9 @@ public class DishRepository {
 
             while (rs.next()) {
                 Dish dish = new Dish();
-                dish.setId(rs.getInt("dish.id"));
-                dish.setName(rs.getString("dish.name"));
-                dish.setSellingPrice(rs.getDouble("dish.price"));
+                dish.setId(rs.getInt("id"));
+                dish.setName(rs.getString("name"));
+                dish.setSellingPrice(rs.getDouble("selling_price"));
                 dish.setIngredients(findIngredientByDishId(dish.getId()));
                 dishes.add(dish);
             }
