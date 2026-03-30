@@ -64,4 +64,26 @@ public class IngredientController {
         }
     }
 
+    @GetMapping("/ingredients/{id}/stock")
+    public ResponseEntity<?> getIngredientStock(@PathVariable("id") int id, @RequestParam(name = "at", required = false) Instant at, @RequestParam (name = "unit", required = false) DishIngredient.Unit unit) {
+        try {
+            return ResponseEntity
+                    .status(200)
+                    .header("Content-Type", "application/json")
+                    .body(stockService.findStockIngredient(id, at, unit));
+        } catch (BadRequestException e) {
+            return ResponseEntity.status(400)
+                    .header("Content-Type", "text/plain")
+                    .body(e.getMessage());
+        } catch (NotFoundException e) {
+            return ResponseEntity.status(404)
+                    .header("Content-Type", "text/plain")
+                    .body(e.getMessage());
+        } catch (Exception e) {
+        return ResponseEntity.status(500)
+                .header("Content-Type", "text/plain")
+                .body(e.getMessage());
+        }
+    }
+
 }
