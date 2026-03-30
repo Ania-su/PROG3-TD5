@@ -5,14 +5,14 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>4.0.5</version>
+        <version>4.0.3</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>k2.ania</groupId>
-    <artifactId>ingredient_again</artifactId>
+    <groupId>k2.example</groupId>
+    <artifactId>http-response</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>ingredient_again</name>
-    <description>ingredient_again</description>
+    <name>http-response</name>
+    <description>http-response</description>
     <url/>
     <licenses>
         <license/>
