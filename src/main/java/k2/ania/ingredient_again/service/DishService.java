@@ -1,6 +1,7 @@
 package k2.ania.ingredient_again.service;
 
 import k2.ania.ingredient_again.entity.Dish;
+import k2.ania.ingredient_again.entity.DishIngredient;
 import k2.ania.ingredient_again.entity.Ingredient;
 import k2.ania.ingredient_again.exceptions.BadRequestException;
 import k2.ania.ingredient_again.exceptions.NotFoundException;
@@ -32,26 +33,31 @@ public class DishService {
     }
 
     public Dish attachAndDetachIngredient(int dishId, List<Ingredient> ingredients) throws SQLException {
-        if  (ingredients.isEmpty() || ingredients == null) {
+
+        if (ingredients == null || ingredients.isEmpty()) {
             throw new BadRequestException("Missing request body");
         }
 
         Dish dish = dishRepository.findDishById(dishId);
         if (dish == null) {
-            throw new NotFoundException("Dish.id  = {" + dishId + "} is not found");
+            throw new NotFoundException("Dish.id = {" + dishId + "} is not found");
         }
 
         for (Ingredient ingredient : ingredients) {
-            Ingredient ing = ingredientRepository.findIngredientById(ingredient.getId());
-            if (ing != null) {
-                    if (dish.getIngredients().stream().anyMatch(di -> di.getIngredient().getId() == ing.getId())) {
-                    dishRepository.detachIngredient(dishId, ing.getId());
-                }
-                else {
-                    dishRepository.attachIngredient(dishId, ing.getId());
-                }
+
+            Ingredient existing = ingredientRepository.findIngredientById(ingredient.getId());
+            if (existing == null) continue;
+
+            boolean alreadyLinked = dish.getIngredients().stream()
+                    .anyMatch(di -> di.getIngredient().getId() == existing.getId());
+
+            if (alreadyLinked) {
+                dishRepository.detachIngredient(dishId, existing.getId());
+            } else {
+                dishRepository.attachIngredient(dishId, existing.getId());
             }
         }
-        return dish;
+
+        return dishRepository.findDishById(dishId);
     }
 }
