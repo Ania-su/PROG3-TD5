@@ -75,4 +75,28 @@ public class DishController {
                     .body(e.getMessage());
         }
     }
+
+    @GetMapping("/dishes/{id}/ingredients")
+    public ResponseEntity<?> getIngredientsByDish(
+            @PathVariable int id,
+            @RequestParam(name = "ingredientName", required = false) String name,
+            @RequestParam(name = "ingredientPriceAround", required = false) Double price
+    ) {
+        try {
+            return ResponseEntity
+                    .status(200)
+                    .header("Content-Type", "application/json")
+                    .body(dishService.getIngredientsByDishWithFilter(id, name, price));
+
+        } catch (NotFoundException e) {
+            return ResponseEntity.status(404)
+                    .header("Content-Type", "text/plain")
+                    .body(e.getMessage());
+
+        } catch (Exception e) {
+            return ResponseEntity.status(500)
+                    .header("Content-Type", "text/plain")
+                    .body(e.getMessage());
+        }
+    }
 }

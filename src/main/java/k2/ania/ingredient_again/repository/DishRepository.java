@@ -171,7 +171,58 @@ public class DishRepository {
             throw new RuntimeException(e);
         }
 
+    }
 
+    public List<Ingredient> findIngredientsByDishIdWithFilter(int dishId, String ingredientName, Double priceAround) throws SQLException {
+        List<Ingredient> ingredients = new ArrayList<>();
+
+        StringBuilder sql = new StringBuilder(
+                """
+                    select i.id, i.name, i.price, i.category
+                    from ingredient i
+                    join dishingredient di on di.id_ingredient = i.id
+                    where di.id_dish = ?
+                """
+        );
+
+        if (ingredientName != null && !ingredientName.isBlank()) {
+            sql.append(" and i.name ilike ? ");
+        }
+
+        if (priceAround != null) {
+            sql.append(" and i.price between ? and ?");
+        }
+
+        try (Connection connection = dataSource.getConnection()) {
+            PreparedStatement ps = connection.prepareStatement(sql.toString());
+            int index = 1;
+
+            ps.setInt(index++, dishId);
+
+            if (ingredientName != null && !ingredientName.isBlank()) {
+                ps.setString(index++,"%" + ingredientName + "%");
+            }
+
+            if (priceAround != null) {
+                ps.setDouble(index++, priceAround - 50);
+                ps.setDouble(index++, priceAround + 50);
+            }
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Ingredient ingredient = new Ingredient();
+                ingredient.setId(rs.getInt("id"));
+                ingredient.setName(rs.getString("name"));
+                ingredient.setPrice(rs.getDouble("price"));
+                ingredient.setCategory(Ingredient.CategoryEnum.valueOf(rs.getString("category")));
+                ingredients.add(ingredient);
+            }
+            return ingredients;
+        }
+        catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 

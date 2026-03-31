@@ -1,7 +1,6 @@
 package k2.ania.ingredient_again.service;
 
 import k2.ania.ingredient_again.entity.Dish;
-import k2.ania.ingredient_again.entity.DishIngredient;
 import k2.ania.ingredient_again.entity.Ingredient;
 import k2.ania.ingredient_again.exceptions.BadRequestException;
 import k2.ania.ingredient_again.exceptions.NotFoundException;
@@ -59,5 +58,20 @@ public class DishService {
         }
 
         return dishRepository.findDishById(dishId);
+    }
+
+    public List<Ingredient> getIngredientsByDishWithFilter(
+            int dishId,
+            String name,
+            Double price
+    ) throws SQLException {
+
+        Dish dish = dishRepository.findDishById(dishId);
+
+        if (dish == null) {
+            throw new NotFoundException("Dish.id=" + dishId + " is not found");
+        }
+
+        return dishRepository.findIngredientsByDishIdWithFilter(dishId, name, price);
     }
 }
