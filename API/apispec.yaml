@@ -1,0 +1,65 @@
+openapi: 3.1.0
+info:
+  title: Ingredients
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+paths:
+  /ingredients:
+    get:
+      description: Return Ingredients
+      responses:
+        "200":
+          description : Ingredient found
+          content:
+            application/json:
+              schema:
+                $ref : "#/components/schemas/Ingredient"
+components:
+  schemas:
+    Ingredient:
+      type: object
+      properties:
+        id:
+          type: int
+          example: 2
+        name:
+          type: string
+          example: "Ania"
+        price:
+          type: double
+          example : 120.0
+        category :
+          type: string
+          enum: [VEGETABLE, ANIMAL, MARINE,DIARY, OTHER]
+        stock_movement:
+          type: list
+          allOf:
+            - $ref : "#/components/schemas/StockMovement"
+
+    StockMovement:
+      type: object
+      properties:
+        id:
+          type: int
+          example : 2
+        stock_value:
+          type: object
+          allOf:
+            - $ref : "#/components/schemas/StockValue"
+        movement_type:
+          type: string
+          enum: [IN, OUT]
+        creation_datetime:
+          type: string
+          format: date
+
+    StockValue:
+      type: object
+      properties:
+        quantity:
+          type: double
+          example : 120.0
+        unit:
+          type: string
+          enum: [PCS, KG, L ]
