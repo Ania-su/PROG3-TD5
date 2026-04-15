@@ -38,6 +38,18 @@ paths:
             text/plain:
               schema:
                 type: string
+  /dishes:
+    get:
+      description: Return dishes with ingredients
+      responses:
+        "200":
+          description: Dish list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Dish"
 components:
   schemas:
     Ingredient:
@@ -86,3 +98,24 @@ components:
         unit:
           type: string
           enum: [PCS, KG, L ]
+
+    Dish:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: "Salade de pâtes"
+        dish_type:
+          type: string
+          enum: [START, MAIN, DESSERT]
+        sellingPrice:
+          type: number
+          format: double
+          example: 120.3
+        ingredients:
+          type: array
+          items:
+            $ref: "#/components/schemas/Ingredient"
