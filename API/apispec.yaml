@@ -15,6 +15,29 @@ paths:
             application/json:
               schema:
                 $ref : "#/components/schemas/Ingredient"
+
+  /ingredients/{id}:
+    get:
+      description: Return one ingredient by id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Ingredient found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Ingredient"
+        "404":
+          description: Ingredient not found
+          content:
+            text/plain:
+              schema:
+                type: string
 components:
   schemas:
     Ingredient:
@@ -52,14 +75,14 @@ components:
           enum: [IN, OUT]
         creation_datetime:
           type: string
-          format: date
+          format: datetime
 
     StockValue:
       type: object
       properties:
         quantity:
           type: double
-          example : 120.0
+          example : 12.0
         unit:
           type: string
           enum: [PCS, KG, L ]
