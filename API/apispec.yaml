@@ -38,6 +38,7 @@ paths:
             text/plain:
               schema:
                 type: string
+                example: "Ingredient not found"
 
   /ingredients/{id}/stock:
     get:
@@ -77,6 +78,7 @@ paths:
             text/plain:
               schema:
                 type: string
+                example: "Please fill the query parameters"
 
         "404":
           description: Ingredient not found
@@ -84,6 +86,7 @@ paths:
             text/plain:
               schema:
                 type: string
+                example: "Ingredient not found"
 
   /dishes:
     get:
@@ -97,6 +100,52 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Dish"
+
+  /dishes/{id}/ingredients:
+    put:
+      description: Update ingredients of a dish
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/Ingredient"
+
+      responses:
+        "200":
+          description: Dish updated
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "Dish updated successfully"
+
+
+        "400":
+          description: Missing body
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "Request body is mandatory"
+
+        "404":
+          description: Dish not found
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "Dish not found"
+
 components:
   schemas:
     Ingredient:
