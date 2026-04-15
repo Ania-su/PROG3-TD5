@@ -38,6 +38,53 @@ paths:
             text/plain:
               schema:
                 type: string
+
+  /ingredients/{id}/stock:
+    get:
+      description: Get stock value of ingredient at given time
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+
+        - name: at
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+
+        - name: unit
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [ PCS, KG, L ]
+
+      responses:
+        "200":
+          description: Stock value
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StockValue"
+
+        "400":
+          description: Missing query params
+          content:
+            text/plain:
+              schema:
+                type: string
+
+        "404":
+          description: Ingredient not found
+          content:
+            text/plain:
+              schema:
+                type: string
+
   /dishes:
     get:
       description: Return dishes with ingredients
